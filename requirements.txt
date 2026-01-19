@@ -1,0 +1,16 @@
+# LangChain
+langchain
+langchain-community
+langchain-postgres
+
+# Embeddings
+sentence-transformers
+
+# Database
+psycopg[binary]
+
+# LLM
+google-generativeai
+
+# Utils
+python-dotenv
