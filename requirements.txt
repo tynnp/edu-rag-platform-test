@@ -18,3 +18,7 @@ uvicorn
 
 # Utils
 python-dotenv
+
+# Testing
+pytest
+httpx
