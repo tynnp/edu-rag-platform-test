@@ -12,5 +12,9 @@ psycopg[binary]
 # LLM
 google-generativeai
 
+# API
+fastapi
+uvicorn
+
 # Utils
 python-dotenv
