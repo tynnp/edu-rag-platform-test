@@ -24,6 +24,9 @@ LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 # Retrieval settings
 TOP_K = int(os.getenv("TOP_K", "5"))
 
+# Auth
+PIN_CODE = os.getenv("PIN_CODE", "123456")
+
 # Trả về connection string cho PostgreSQL
 def get_connection_string() -> str:
     return f"postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
