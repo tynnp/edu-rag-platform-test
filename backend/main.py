@@ -5,7 +5,7 @@ FastAPI Backend - EDU RAG Platform Test
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import chat
+from .routes import chat, auth
 from core.generator import get_generator
 
 # Pre-load RAG components khi server khởi động
@@ -33,6 +33,7 @@ app.add_middleware(
 )
 
 app.include_router(chat.router, prefix="/api", tags=["Chat"])
+app.include_router(auth.router, prefix="/api", tags=["Auth"])
 
 @app.get("/")
 def root():
