@@ -15,7 +15,6 @@ router = APIRouter()
 def chat_without_rag(request: ChatRequest):
     genai.configure(api_key=LLM_API_KEY)
     model = genai.GenerativeModel(LLM_MODEL)
-    
     response = model.generate_content(request.message)
     
     return ChatResponse(
