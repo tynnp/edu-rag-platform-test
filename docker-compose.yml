@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: edu-rag-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: edu-rag-frontend
+    restart: unless-stopped
+    ports:
+      - "3508:80"
+    depends_on:
+      - backend # Đợi backend khởi động trước
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
