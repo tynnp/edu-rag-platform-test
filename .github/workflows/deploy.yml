@@ -1,0 +1,42 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        envs: GITHUB_REF_NAME
+        script: |
+          cd /root/edu-rag-platform-test
+          
+          git fetch --all --tags
+          
+          echo "Checking out tag: $GITHUB_REF_NAME"
+          git checkout $GITHUB_REF_NAME
+          
+          # Tạo file .env từ GitHub Secret
+          cat > .env << 'EOF'
+          ${{ secrets.ENV_FILE }}
+          EOF
+          
+          echo "Starting deployment..."
+          docker-compose down --remove-orphans
+          docker-compose up -d --build
+          
+          docker image prune -f
+          
+          echo "Deployment of $GITHUB_REF_NAME successful!"
+      env:
+        GITHUB_REF_NAME: ${{ github.ref_name }}
