@@ -35,48 +35,48 @@ EDU RAG Platform Test là hệ thống chatbot thử nghiệm, sử dụng kỹ 
 
 ```
 edu-rag-platform-test/
-├── backend/                 # API Backend (FastAPI)
-│   ├── routes/              # Định nghĩa các endpoint
-│   │   ├── auth.py          # Xác thực PIN
-│   │   └── chat.py          # Chat API
-│   ├── tests/               # Unit tests cho backend
-│   ├── main.py              # Entry point
-│   └── schemas.py           # Pydantic schemas
+├── backend/                    # API Backend (FastAPI)
+│   ├── routes/                 # Định nghĩa các endpoint
+│   │   ├── auth.py             # Xác thực PIN
+│   │   └── chat.py             # Chat API
+│   ├── tests/                  # Unit tests cho backend
+│   ├── main.py                 # Entry point
+│   └── schemas.py              # Pydantic schemas
 │
-├── core/                    # RAG Core Logic
-│   ├── tests/               # Unit tests cho core
-│   ├── config.py            # Cấu hình từ .env
-│   ├── embedder.py          # Tạo embeddings
-│   ├── generator.py         # Sinh câu trả lời (LLM)
-│   ├── ingest.py            # Nạp dữ liệu vào vector store
-│   ├── retriever.py         # Truy xuất ngữ cảnh
-│   └── vector_store.py      # Kết nối pgvector
+├── core/                       # RAG Core Logic
+│   ├── tests/                  # Unit tests cho core
+│   ├── config.py               # Cấu hình từ .env
+│   ├── embedder.py             # Tạo embeddings
+│   ├── generator.py            # Sinh câu trả lời (LLM)
+│   ├── ingest.py               # Nạp dữ liệu vào vector store
+│   ├── retriever.py            # Truy xuất ngữ cảnh
+│   └── vector_store.py         # Kết nối pgvector
 │
-├── data/                    # Dữ liệu
-│   ├── chunks/              # Các đoạn văn bản đã chia
-│   ├── processed/           # Văn bản đã xử lý
-│   └── raw/                 # Dữ liệu gốc
+├── data/                       # Dữ liệu
+│   ├── chunks/                 # Các đoạn văn bản đã chia
+│   ├── processed/              # Văn bản đã xử lý
+│   └── raw/                    # Dữ liệu gốc
 │
-├── frontend/                # Giao diện (React + Vite)
+├── frontend/                   # Giao diện (React + Vite)
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── pages/           # Các trang (PIN, Chat)
-│   │   ├── services/        # API calls
-│   │   └── types/           # TypeScript types
-│   ├── Dockerfile           # Build frontend image
-│   └── nginx.conf           # Cấu hình Nginx
+│   │   ├── components/         # React components
+│   │   ├── pages/              # Các trang (PIN, Chat)
+│   │   ├── services/           # API calls
+│   │   └── types/              # TypeScript types
+│   ├── Dockerfile              # Build frontend image
+│   └── nginx.conf              # Cấu hình Nginx
 │
-├── .github/workflows/       # GitHub Actions
-│   └── deploy.yml           # Auto deploy khi push tag
+├── .github/workflows/          # GitHub Actions
+│   └── deploy.yml              # Auto deploy khi push tag
 │
-├── Dockerfile.backend       # Build backend image
-├── docker-compose.yml       # Docker Compose config (build từ source)
-├── docker-compose.images.yml # Docker Compose config (dùng pre-built images)
-├── build-and-save.bat       # Script build và save images (Windows)
-├── deploy.sh                # Script deploy trên server (Linux)
-├── requirements.txt         # Python dependencies
-├── LICENSE                  # MIT License
-└── .env                     # Biến môi trường (không commit)
+├── Dockerfile.backend          # Build backend image
+├── docker-compose.yml          # Docker Compose config (build từ source)
+├── docker-compose.images.yml   # Docker Compose config (dùng pre-built images)
+├── build-and-save.bat          # Script build và save images (Windows)
+├── deploy.sh                   # Script deploy trên server (Linux)
+├── requirements.txt            # Python dependencies
+├── LICENSE                     # MIT License
+└── .env.example                # File mẫu .env
 ```
 
 ---
@@ -207,7 +207,7 @@ docker-compose up -d --build
 
 ---
 
-## Triển khai (Deploy)
+## Triển khai
 
 Hệ thống hỗ trợ tự động deploy qua GitHub Actions khi push tag.
 
