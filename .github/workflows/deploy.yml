@@ -10,7 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Deploy via SSH
+    # Checkout source code từ GitHub
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Tạo file .env từ Secret
+    - name: Create .env file
+      run: echo "${{ secrets.ENV_FILE }}" > .env
+
+    # Copy source code lên server bằng rsync
+    - name: Copy files to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "."
+        target: "/root/edu-rag-platform-test"
+        overwrite: true
+
+    # SSH vào server chạy docker-compose
+    - name: Deploy with Docker
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -20,23 +41,12 @@ jobs:
         envs: GITHUB_REF_NAME
         script: |
           cd /root/edu-rag-platform-test
-          
-          git fetch --all --tags
-          
-          echo "Checking out tag: $GITHUB_REF_NAME"
-          git checkout $GITHUB_REF_NAME
-          
-          # Tạo file .env từ GitHub Secret
-          cat > .env << 'EOF'
-          ${{ secrets.ENV_FILE }}
-          EOF
-          
-          echo "Starting deployment..."
+
+          echo "Starting deployment for $GITHUB_REF_NAME..."
           docker-compose down --remove-orphans
           docker-compose up -d --build
           
           docker image prune -f
-          
           echo "Deployment of $GITHUB_REF_NAME successful!"
       env:
         GITHUB_REF_NAME: ${{ github.ref_name }}
