@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
-          command_timeout: 20m
+          command_timeout: 60m
           script: |
             cd /root/edu-rag-platform-test
             
@@ -64,11 +64,12 @@ jobs:
             docker load -i edu-rag-backend.tar
             docker load -i edu-rag-frontend.tar
             
-            # Stop old containers
-            docker-compose down 2>/dev/null || true
+            # Stop and remove old containers
+            docker-compose down --remove-orphans 2>/dev/null || true
+            docker rm -f edu-rag-backend edu-rag-frontend 2>/dev/null || true
             
             # Start new containers
-            docker-compose up -d
+            docker-compose up -d --force-recreate
             
             # Show status
             docker-compose ps
