@@ -31,13 +31,17 @@ class VectorStore:
     def add_chunks(self, chunks: List[Dict[str, Any]]) -> List[str]:
         documents = []
         for chunk in chunks:
+            keywords = chunk.get("keywords", [])
+            keywords_str = ", ".join(keywords) if keywords else ""
+            
             doc = Document(
                 page_content=chunk["text"],
                 metadata={
                     "chunk_id": chunk.get("chunk_id"),
                     "source": chunk.get("source", ""),
                     "section": chunk.get("section", ""),
-                    "order": chunk.get("order", 0)
+                    "page": chunk.get("page", 1),
+                    "keywords": keywords_str
                 }
             )
             documents.append(doc)
@@ -57,6 +61,23 @@ class VectorStore:
         store = self._get_store()
         results = store.similarity_search_with_score(query, k=k)
         return results
+    
+    def hybrid_search(self, query: str, k: int = 5, keyword_boost: float = 0.3) -> List[tuple]:
+        store = self._get_store()
+        results = store.similarity_search_with_score(query, k=k*2)
+        query_keywords = set(query.lower().split())
+        
+        reranked = []
+        for doc, score in results:
+            doc_keywords = doc.metadata.get("keywords", "").lower()
+            keyword_matches = sum(1 for kw in query_keywords if kw in doc_keywords)
+            
+            # Tính điểm mới: score gốc + boost từ keyword
+            boosted_score = score - (keyword_matches * keyword_boost)
+            reranked.append((doc, boosted_score, keyword_matches))
+        
+        reranked.sort(key=lambda x: x[1])
+        return [(doc, score) for doc, score, _ in reranked[:k]]
 
 _vector_store_instance = None
 

@@ -8,17 +8,19 @@ from .vector_store import get_vector_store
 from .config import TOP_K
 
 class Retriever:
-    # Khởi tạo retriever
     def __init__(self, collection_name: str = "edu_documents"):
         self.vector_store = get_vector_store(collection_name)
         self.top_k = TOP_K
     
-    # Tìm kiếm chunks liên quan nhất với câu hỏi
-    def retrieve(self, query: str, k: int = None) -> List[Dict[str, Any]]:
+    def retrieve(self, query: str, k: int = None, use_hybrid: bool = True) -> List[Dict[str, Any]]:
         if k is None:
             k = self.top_k
         
-        results = self.vector_store.similarity_search_with_score(query, k=k)
+        # Ưu tiên hybrid search
+        if use_hybrid:
+            results = self.vector_store.hybrid_search(query, k=k)
+        else:
+            results = self.vector_store.similarity_search_with_score(query, k=k)
         
         chunks = []
         for doc, score in results:
@@ -29,7 +31,6 @@ class Retriever:
             })
         return chunks
     
-    # Tìm kiếm và trả về context dạng JSON
     def get_context(self, query: str, k: int = None) -> str:
         chunks = self.retrieve(query, k)
         
@@ -39,7 +40,7 @@ class Retriever:
                 "text": chunk["text"],
                 "source": chunk["metadata"].get("source"),
                 "section": chunk["metadata"].get("section"),
-                "order": chunk["metadata"].get("order")
+                "page": chunk["metadata"].get("page")
             })
         
         return json.dumps(context_chunks, ensure_ascii=False, indent=2)
