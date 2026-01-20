@@ -1,21 +1,15 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
+    image: edu-rag-backend:latest
     container_name: edu-rag-backend
     restart: unless-stopped
     env_file:
       - .env
-    volumes:
-      - ./data:/app/data
     networks:
       - app-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: edu-rag-frontend:latest
     container_name: edu-rag-frontend
     restart: unless-stopped
     ports:

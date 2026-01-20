@@ -70,7 +70,10 @@ edu-rag-platform-test/
 │   └── deploy.yml           # Auto deploy khi push tag
 │
 ├── Dockerfile.backend       # Build backend image
-├── docker-compose.yml       # Docker Compose config
+├── docker-compose.yml       # Docker Compose config (build từ source)
+├── docker-compose.images.yml # Docker Compose config (dùng pre-built images)
+├── build-and-save.bat       # Script build và save images (Windows)
+├── deploy.sh                # Script deploy trên server (Linux)
 ├── requirements.txt         # Python dependencies
 ├── LICENSE                  # MIT License
 └── .env                     # Biến môi trường (không commit)
@@ -201,16 +204,44 @@ Vào `Settings > Secrets and variables > Actions` của repository và thêm:
 | `SSH_PORT` | Cổng SSH (vd: 22) |
 | `ENV_FILE` | Toàn bộ nội dung file .env |
 
-### Triển khai
+### Triển khai tự động
 
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
+```
 
 Workflow sẽ tự động:
 1. Copy source code lên server.
 2. Tạo file .env từ secret.
 3. Build và chạy docker-compose up -d --build
+
+### Triển khai thủ công
+
+Nếu muốn build images trên máy local và copy lên server:
+
+**Bước 1: Build images trên Windows**
+
+```bash
+build-and-save.bat
+```
+
+Kết quả: `docker-images/edu-rag-backend.tar` và `docker-images/edu-rag-frontend.tar`
+
+**Bước 2: Copy folder `docker-images/` lên server**
+
+**Bước 3: Trên server, sử dụng `deploy.sh`**
+
+| Lệnh | Mô tả |
+|------|-------|
+| `./deploy.sh load` | Load images từ file .tar |
+| `./deploy.sh up` | Khởi động containers |
+| `./deploy.sh down` | Dừng containers |
+| `./deploy.sh restart` | Khởi động lại |
+| `./deploy.sh logs` | Xem logs |
+| `./deploy.sh status` | Xem trạng thái |
+| `./deploy.sh clean` | Xóa tất cả images/containers |
+| `./deploy.sh build` | Build lại từ source |
 
 ---
 

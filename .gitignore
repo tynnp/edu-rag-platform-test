@@ -57,3 +57,6 @@ models/
 *.bin
 *.pt
 *.onnx
+
+# Build
+docker-images/
