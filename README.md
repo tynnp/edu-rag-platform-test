@@ -206,18 +206,11 @@ Vào `Settings > Secrets and variables > Actions` của repository và thêm:
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
-```
 
 Workflow sẽ tự động:
 1. Copy source code lên server.
 2. Tạo file .env từ secret.
-
-Sau đó, SSH vào server và chạy:
-
-```bash
-cd /root/edu-rag-platform-test
-docker-compose up -d --build
-```
+3. Build và chạy docker-compose up -d --build
 
 ---
 
