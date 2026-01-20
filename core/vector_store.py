@@ -2,18 +2,17 @@
 VectorStore module - Kết nối PostgreSQL với pgvector
 """
 
-import os
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from langchain_postgres import PGVector
 from langchain_core.documents import Document
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from .config import get_connection_string, EMBEDDING_MODEL
+from .config import get_connection_string
+from .embedder import get_embedder
 
 class VectorStore:
     # Khởi tạo kết nối đến PostgreSQL pgvector
     def __init__(self, collection_name: str = "edu_documents"):
         self.collection_name = collection_name
-        self.embeddings = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL)
+        self.embeddings = get_embedder().client 
         self.connection_string = get_connection_string()
         self._store = None
     
@@ -36,9 +35,9 @@ class VectorStore:
                 page_content=chunk["text"],
                 metadata={
                     "chunk_id": chunk.get("chunk_id"),
-                    "source": chunk.get("source"),
-                    "section": chunk.get("section"),
-                    "order": chunk.get("order")
+                    "source": chunk.get("source", ""),
+                    "section": chunk.get("section", ""),
+                    "order": chunk.get("order", 0)
                 }
             )
             documents.append(doc)

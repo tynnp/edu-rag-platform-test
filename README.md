@@ -118,7 +118,7 @@ DB_USER=your_user
 DB_PASSWORD=your_password
 
 # Embedding
-EMBEDDING_MODEL=dangvantuan/vietnamese-embedding
+EMBEDDING_MODEL=models/text-embedding-004
 
 # LLM
 LLM_MODEL=gemini-3-flash-preview
@@ -180,7 +180,7 @@ docker-compose up -d --build
 | `DB_NAME` | Tên database |
 | `DB_USER` | Tên người dùng database |
 | `DB_PASSWORD` | Mật khẩu database |
-| `EMBEDDING_MODEL` | Model embedding (mặc định: dangvantuan/vietnamese-embedding) |
+| `EMBEDDING_MODEL` | Model embedding (mặc định: models/text-embedding-004) |
 | `LLM_MODEL` | Model LLM (mặc định: gemini-3-flash-preview) |
 | `LLM_API_KEY` | API Key của Google Gemini |
 | `TOP_K` | Số lượng chunks truy xuất (mặc định: 5) |

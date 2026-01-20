@@ -2,15 +2,13 @@
 langchain
 langchain-community
 langchain-postgres
-
-# Embeddings
-sentence-transformers
+langchain-google-genai
 
 # Database
 psycopg[binary]
 
-# LLM
-google-generativeai
+# LLM & Embedding (Gemini)
+google-genai
 
 # API
 fastapi
