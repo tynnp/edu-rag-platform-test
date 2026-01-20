@@ -26,7 +26,7 @@
 
 EDU RAG Platform Test là hệ thống chatbot thử nghiệm, sử dụng kỹ thuật RAG để trả lời các câu hỏi liên quan đến nội quy lớp học trực tuyến. Hệ thống kết hợp:
 
-- **Retrieval**: Tìm kiếm ngữ nghĩa trong cơ sở dữ liệu vector (pgvector).
+- **Retrieval**: Hybrid Search kết hợp tìm kiếm vector (pgvector) và keyword matching.
 - **Augmented Generation**: Sử dụng Google Gemini để sinh câu trả lời dựa trên ngữ cảnh.
 
 ---
@@ -131,14 +131,35 @@ TOP_K=5
 PIN_CODE=123456
 ```
 
-3. Cài đặt và chạy Backend:
+3. Cài đặt dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+4. Xây dựng hệ thống RAG:
+
+Ingestion (Nạp dữ liệu vào Vector DB):
+
+```bash
+python -m core.ingest
+```
+
+Script sẽ đọc chunks từ `data/chunks/`, tạo embeddings và lưu vào PostgreSQL pgvector.
+
+Query (Test):
+
+```bash
+python core/tests/test_chat.py
+```
+
+5. Chạy Backend:
+
+```bash
 uvicorn backend.main:app --reload
 ```
 
-4. Cài đặt và chạy Frontend:
+6. Chạy Frontend:
 
 ```bash
 cd frontend
@@ -146,7 +167,7 @@ npm install
 npm run dev
 ```
 
-5. Truy cập `http://localhost:5173` và nhập PIN để sử dụng.
+7. Truy cập `http://localhost:5173` và nhập PIN để sử dụng.
 
 ---
 
