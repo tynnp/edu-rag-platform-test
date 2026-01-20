@@ -214,7 +214,6 @@ Workflow sẽ tự động:
 3. Chạy docker-compose để build và khởi động container.
 
 ---
-<br/>
 
 <div align="center">
 
