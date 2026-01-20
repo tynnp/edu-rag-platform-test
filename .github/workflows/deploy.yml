@@ -10,15 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout source code từ GitHub
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Tạo file .env từ Secret
     - name: Create .env file
       run: echo "${{ secrets.ENV_FILE }}" > .env
 
-    # Copy source code lên server bằng rsync
     - name: Copy files to server
       uses: appleboy/scp-action@v0.1.7
       with:
@@ -30,7 +27,6 @@ jobs:
         target: "/root/edu-rag-platform-test"
         overwrite: true
 
-    # SSH vào server chạy docker-compose
     - name: Deploy with Docker
       uses: appleboy/ssh-action@v1.0.3
       with:
@@ -38,14 +34,13 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
+        command_timeout: 30m
         envs: GITHUB_REF_NAME
         script: |
           cd /root/edu-rag-platform-test
-
           echo "Starting deployment for $GITHUB_REF_NAME..."
           docker-compose down --remove-orphans
           docker-compose up -d --build
-          
           docker image prune -f
           echo "Deployment of $GITHUB_REF_NAME successful!"
       env:
