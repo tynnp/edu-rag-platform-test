@@ -96,9 +96,7 @@ edu-rag-platform-test/
 
 ---
 
-## Cài đặt
-
-### Chạy local
+### Chạy trên local
 
 1. Clone repository:
 
