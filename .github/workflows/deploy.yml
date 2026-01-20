@@ -27,8 +27,10 @@ jobs:
           docker build -f frontend/Dockerfile -t edu-rag-frontend:latest ./frontend
           docker save edu-rag-frontend:latest -o edu-rag-frontend.tar
 
-      - name: Create .env file
-        run: echo "${{ secrets.ENV_FILE }}" > .env
+      - name: Prepare files for transfer
+        run: |
+          chmod 644 edu-rag-backend.tar edu-rag-frontend.tar
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
