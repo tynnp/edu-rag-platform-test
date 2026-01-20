@@ -32,15 +32,15 @@ export default function ChatPage() {
         <div className="h-screen w-full flex bg-gray-100">
             {/* PDF Viewer - Left Side */}
             {showPdf && (
-                <div className="w-[45%] h-full border-r border-gray-300 bg-white flex flex-col">
-                    <div className="p-3 bg-indigo-600 text-white flex justify-between items-center">
-                        <span className="font-semibold flex items-center gap-2">
-                            <FileText size={18} />
+                <div className="w-[45%] h-full border-r border-gray-200 bg-white flex flex-col">
+                    <div className="sticky top-0 z-10 h-14 bg-white/80 backdrop-blur-md border-b border-gray-200 px-4 flex justify-between items-center">
+                        <span className="font-semibold flex items-center gap-2 text-gray-800">
+                            <FileText size={18} className="text-indigo-600" />
                             Tài liệu gốc
                         </span>
                         <button
                             onClick={() => setShowPdf(false)}
-                            className="text-white hover:text-gray-200"
+                            className="text-gray-500 hover:text-gray-700"
                         >
                             <X size={20} />
                         </button>

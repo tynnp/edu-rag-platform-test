@@ -28,7 +28,7 @@ export default function PinPage({ onSuccess }: PinPageProps) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
             <PinInput onSubmit={handleSubmit} error={error} loading={loading} />
         </div>
     );
