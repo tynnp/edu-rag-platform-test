@@ -3,5 +3,16 @@
     "text": "3. Chức năng camera của từng học sinh luôn ở chế độ bật trong suốt thời gian học; Chức năng micro ở chế độ tắt, học sinh chỉ bật chức năng micro theo yêu cầu của giáo viên như khi giáo viên điểm danh đầu giờ, mời học sinh phát biểu hoặc giáo viên yêu cầu học sinh trình bày hình ảnh, sản phẩm trong giờ học.",
     "source": "Nội quy lớp học trực tuyến",
     "section": "I. Đối với học sinh",
-    "order": 5
+    "page": 1,
+    "keywords": [
+        "học sinh",
+        "camera",
+        "webcam",
+        "micro",
+        "microphone",
+        "bật",
+        "tắt",
+        "điểm danh",
+        "phát biểu"
+    ]
 }
