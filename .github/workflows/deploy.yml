@@ -1,0 +1,77 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Image
+        run: |
+          docker build -f Dockerfile.backend -t edu-rag-backend:latest .
+          docker save edu-rag-backend:latest -o edu-rag-backend.tar
+
+      - name: Build Frontend Image
+        run: |
+          docker build -f frontend/Dockerfile -t edu-rag-frontend:latest ./frontend
+          docker save edu-rag-frontend:latest -o edu-rag-frontend.tar
+
+      - name: Create .env file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "edu-rag-backend.tar,edu-rag-frontend.tar,.env,docker-compose.images.yml,deploy.sh"
+          target: "/root/edu-rag-platform-test"
+
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 20m
+          script: |
+            cd /root/edu-rag-platform
+            
+            # Rename docker-compose file
+            mv docker-compose.images.yml docker-compose.yml 2>/dev/null || true
+            
+            # Make deploy.sh executable
+            chmod +x deploy.sh
+            
+            # Load images
+            echo "Loading Docker images..."
+            docker load -i edu-rag-backend.tar
+            docker load -i edu-rag-frontend.tar
+            
+            # Stop old containers
+            docker-compose down 2>/dev/null || true
+            
+            # Start new containers
+            docker-compose up -d
+            
+            # Show status
+            docker-compose ps
+            
+            # Cleanup tar files
+            rm -f edu-rag-backend.tar edu-rag-frontend.tar
+            
+            echo "Deploy completed! App running on port 3508"
