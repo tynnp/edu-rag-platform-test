@@ -49,7 +49,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           command_timeout: 20m
           script: |
-            cd /root/edu-rag-platform
+            cd /root/edu-rag-platform-test
             
             # Rename docker-compose file
             mv docker-compose.images.yml docker-compose.yml 2>/dev/null || true
