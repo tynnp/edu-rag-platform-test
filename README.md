@@ -211,7 +211,13 @@ git push origin v1.0.0
 Workflow sẽ tự động:
 1. Copy source code lên server.
 2. Tạo file .env từ secret.
-3. Chạy docker-compose để build và khởi động container.
+
+Sau đó, SSH vào server và chạy:
+
+```bash
+cd /root/edu-rag-platform-test
+docker-compose up -d --build
+```
 
 ---
 
